@@ -1,0 +1,4 @@
+---
+# tasks file for role-sample
+- name: Debug
+  msg: "Role sample debug message"
