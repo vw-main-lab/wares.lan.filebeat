@@ -1,4 +1,57 @@
 ---
-# tasks file for role-sample
-- name: Debug
-  msg: "Role sample debug message"
+# tasks file for wares.lan.filebeat
+
+# - name: Download file with check
+#   ansible.builtin.get_url:
+#     url: "{{ wares_lan_filebeat_source.download_url }}"
+#     dest: "{{ wares_lan_filebeat_source.temporary_dir }}"
+#     checksum: "{{ wares_lan_filebeat_source.checksum }}"
+#   register: wares_lan_filebeat_source_archive_file
+
+# - debug: var=wares_lan_filebeat_source_archive_file
+
+# - name: Ensure filebeat user target group exists
+#   ansible.builtin.group:
+#     name: "{{ wares_lan_filebeat.group }}"
+#     state: present
+
+# - name: Create filebeat user if it does not exist
+#   ansible.builtin.user:
+#     name: "{{ wares_lan_filebeat.user }}"
+#     comment: "Filebeat User"
+#     group: "{{ wares_lan_filebeat.group }}"
+
+# - name: Create directories if they do not exist
+#   ansible.builtin.file:
+#     path: "{{ item }}"
+#     state: directory
+#     owner: "{{ wares_lan_filebeat.user }}"
+#     group: "{{ wares_lan_filebeat.group }}"
+#     mode: '0755'
+#   loop:
+#     - "{{ wares_lan_filebeat.binary_dir }}"
+#     - "{{ wares_lan_filebeat.config_dir }}"
+
+# - name: Unarchive file that is already on the remote machine
+#   ansible.builtin.unarchive:
+#     src: "{{ wares_lan_filebeat_source_archive_file.dest }}"
+#     dest: "{{ wares_lan_filebeat_source.temporary_dir }}"
+#     remote_src: yes
+
+# - name: Copy extracted content to filebeat binary dir
+#   ansible.builtin.copy:
+#     src: "{{ wares_lan_filebeat_source.temporary_dir }}/{{ wares_lan_filebeat_source.extracted_dirname }}/"
+#     dest: "{{ wares_lan_filebeat.binary_dir }}/"
+#     owner: "{{ wares_lan_filebeat.user }}"
+#     group: "{{ wares_lan_filebeat.group }}"
+#     mode: '0755'
+#     remote_src: yes
+
+- name: Template config file to filebeat config directory
+  ansible.builtin.template:
+    src: "filebeat-config.yml"
+    dest: "{{ wares_lan_filebeat.config_dir }}/{{ wares_lan_filebeat.config_filename }}"
+    owner: "{{ wares_lan_filebeat.user }}"
+    group: "{{ wares_lan_filebeat.group }}"
+    mode: '0755'
+

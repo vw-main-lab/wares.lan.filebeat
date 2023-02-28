@@ -1,2 +1,29 @@
 ---
-# defaults file for role-sample
+# defaults file for wares.lan.filebeat
+wares_lan_filebeat:
+  binary_dir: "/usr/local/bin/filebeat"
+  config_dir: "/usr/local/bin/filebeat/config"
+  user: "filebeat"
+  group: "users"
+  config_filename: "filebeat.yml"
+  run_as_service: true
+  general:
+    environment: "dev" # leave blank ("") to comment out in filebeat configuration file
+  inputs:
+    filestreams: # Paths that should be crawled and fetched, and optional additional fields
+      - {id: 'access-logs', enabled: true, paths: ['/var/log/apache/access.log','/home/john/weblogs/*.log'], fields: {my_field1: 'COD123', my_field2: 'd83d34df4ff43'}, fields_under_root: true}
+      - {id: 'error-logs', enabled: false, paths: ['/var/log/apache/error.log','/var/log/syslog'], fields: {my_field1: 'COD456', my_field2: 'd83d34df4ff43'}, fields_under_root: true}
+  outputs: # Configure what output to use when sending the data collected by the beat
+    elasticsearch:
+      enabled: true
+      hosts: ["localhost:9200"]
+      protocol: "http" # either `http` (default) or `https`.
+      auth: # Authentication credentials - either API key or username/password; leave api_key and username blank ("") to disable authentication
+        api_key: "" # format: "id:api-key", e.g "TiNAGG4BaaMdaH1tRfuU:KnR6yE41RrSowb0kQ0HWoA"
+        username: ""
+        password: ""
+    logstash:
+      enabled: false
+      hosts: ["localhost:5044", "localhost:5045"]
+      loadbalance: true
+      worker: -1 # set to -1 to comment out in filebeat configuration file
