@@ -1,0 +1,13 @@
+[Unit]
+Description={{ wares_lan_filebeat_service.description }}
+After={{ wares_lan_filebeat_service.after }}
+
+[Service]
+ExecStart={{ wares_lan_filebeat_service.execstart }}
+KillMode={{ wares_lan_filebeat_service.killmode }}
+Type={{ wares_lan_filebeat_service.type }}
+User={{ wares_lan_filebeat_service.user }}
+Group={{ wares_lan_filebeat_service.group }}
+
+[Install]
+WantedBy={{ wares_lan_filebeat_service.wantedby }}

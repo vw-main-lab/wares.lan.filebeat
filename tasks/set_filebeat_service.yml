@@ -1,0 +1,11 @@
+---
+- name: Template filebeat service file
+  ansible.builtin.template:
+    src: filebeat.service
+    dest: "/etc/systemd/system/{{ wares_lan_filebeat_service.filename }}"
+    owner: "{{ wares_lan_filebeat_service.user }}"
+    group: "{{ wares_lan_filebeat_service.group }}"
+    mode: '0600'
+  notify:
+  - Enable filebeat service and ensure it is not masked
+  - Restart filebeat service

@@ -47,11 +47,14 @@
 #     mode: '0755'
 #     remote_src: yes
 
-- name: Template config file to filebeat config directory
-  ansible.builtin.template:
-    src: "filebeat-config.yml"
-    dest: "{{ wares_lan_filebeat.config_dir }}/{{ wares_lan_filebeat.config_filename }}"
-    owner: "{{ wares_lan_filebeat.user }}"
-    group: "{{ wares_lan_filebeat.group }}"
-    mode: '0755'
+# - name: Template config file to filebeat config directory
+#   ansible.builtin.template:
+#     src: "filebeat-config.yml"
+#     dest: "{{ wares_lan_filebeat.config_dir }}/{{ wares_lan_filebeat.config_filename }}"
+#     owner: "{{ wares_lan_filebeat.user }}"
+#     group: "{{ wares_lan_filebeat.group }}"
+#     mode: '0755'
 
+- name: Set Filebeat service
+  ansible.builtin.include_tasks: "set_filebeat_service.yml"
+  when: wares_lan_filebeat.run_as_service == true
