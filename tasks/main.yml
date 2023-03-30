@@ -93,5 +93,5 @@
 
     - name: Remove downloaded archive file if present
       ansible.builtin.file:
-        path: "{{ wares_lan_filebeat_source_archive_file.dest }}"
+        path: "{{ wares_lan_filebeat_source.temporary_dir }}/{{ (wares_lan_filebeat_source.download_url).split('/')|last }}"
         state: absent
