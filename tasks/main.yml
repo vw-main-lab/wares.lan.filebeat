@@ -13,10 +13,13 @@
     ################################
 
     - name: Download file with check
-      ansible.builtin.get_url:
+      ansible.builtin.uri:
         url: "{{ wares_lan_filebeat_source.download_url }}"
+        method: GET
+        user: "{{ wares_lan_filebeat_source.basic_auth_user }}"
+        password: "{{ wares_lan_filebeat_source.basic_auth_password }}"
+        force_basic_auth: "{{ wares_lan_filebeat_source.force_basic_auth }}"
         dest: "{{ wares_lan_filebeat_source.temporary_dir }}"
-        checksum: "{{ wares_lan_filebeat_source.checksum }}"
       register: wares_lan_filebeat_source_archive_file
 
 
@@ -54,7 +57,7 @@
 
     - name: Unarchive file that is already on the remote machine
       ansible.builtin.unarchive:
-        src: "{{ wares_lan_filebeat_source_archive_file.dest }}"
+        src: "{{ wares_lan_filebeat_source_archive_file.path }}"
         dest: "{{ wares_lan_filebeat_source.temporary_dir }}"
         remote_src: yes
 

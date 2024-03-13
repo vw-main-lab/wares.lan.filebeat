@@ -1,5 +1,6 @@
 ---
 # vars file for wares.lan.filebeat
+
 wares_lan_filebeat:
   binary_dir: "/usr/local/bin/filebeat"
   config_dir: "/usr/local/bin/filebeat/config"

@@ -6,6 +6,9 @@ wares_lan_filebeat_source:
   extracted_dirname: "filebeat-7.16.3-linux-x86_64"
   download_url: "https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.16.3-linux-x86_64.tar.gz"
   checksum: "sha512:6a2223b79e97f6560a7113c1490d29e7bd8cc6b1c6be82121f7257651362ae440701f19e0b92856bacf7b7598cb7d189b926475fa0d8a87feca497ae10425b7c"
+  basic_auth_user: ""
+  basic_auth_password: ""
+  force_basic_auth: False # False will first try an unauthenticated request, then submit basic auth with an HTTP 401 error
 
 wares_lan_filebeat_service:
   filename: "filebeat-wares.service"
