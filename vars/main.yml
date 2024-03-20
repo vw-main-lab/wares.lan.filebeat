@@ -1,30 +1,22 @@
 ---
 # vars file for wares.lan.filebeat
 
-wares_lan_filebeat:
-  binary_dir: "/usr/local/bin/filebeat"
-  config_dir: "/usr/local/bin/filebeat/config"
-  user: "filebeat"
-  group: "users"
-  config_filename: "filebeat.yml"
-  run_as_service: true
-  general:
-    environment: "dev" # leave blank ("") to comment out in filebeat configuration file
-  inputs:
-    filestreams: # Paths that should be crawled and fetched, and optional additional fields
-      - {id: 'access-logs', enabled: true, paths: ['/var/log/apache/access.log','/home/john/weblogs/*.log'], fields: {my_field1: 'COD123', my_field2: 'd83d34df4ff43'}, fields_under_root: true}
-      - {id: 'error-logs', enabled: false, paths: ['/var/log/apache/error.log','/var/log/syslog'], fields: {my_field1: 'COD456', my_field2: 'd83d34df4ff43'}, fields_under_root: true}
-  outputs: # Configure what output to use when sending the data collected by the beat
-    elasticsearch:
-      enabled: true
-      hosts: ["localhost:9200"]
-      protocol: "http" # either `http` (default) or `https`.
-      auth: # Authentication credentials - either API key or username/password; leave api_key and username blank ("") to disable authentication
-        api_key: "" # format: "id:api-key", e.g "TiNAGG4BaaMdaH1tRfuU:KnR6yE41RrSowb0kQ0HWoA"
-        username: ""
-        password: ""
-    logstash:
-      enabled: false
-      hosts: ["localhost:5044", "localhost:5045"]
-      loadbalance: true
-      worker: -1 # set to -1 to comment out in filebeat configuration file
+wares_lan_filebeat_source:
+  temporary_dir: "/var/tmp"
+  extracted_dirname: "filebeat-8.10.4"
+  download_url: "https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.10.4-linux-x86_64.tar.gz"
+  checksum: "sha512:37075e04a4b2c820ca980de13734533c795ceb95da5595ef74e6ffc432000b5361c4b72495abf5830788cd50346ac065769ea570ec257aa46cd6851967504e73"
+  basic_auth_user: "httpuser"
+  basic_auth_password: "P@55w0rd"
+  force_basic_auth: False # False will first try an unauthenticated request, then submit basic auth with an HTTP 401 error
+
+wares_lan_filebeat_service:
+  filename: "filebeat-wares.service"
+  description: "Filebeat (wares) service"
+  after: ["network.target"]
+  type: "simple"
+  killmode: "process"
+  execstart: "{{ wares_lan_filebeat.binary_dir }}/filebeat -c {{ wares_lan_filebeat.config_dir }}/{{ wares_lan_filebeat.config_filename }}"
+  wantedby: "multi-user.target"
+  user: "{{ wares_lan_filebeat.user }}"
+  group: "{{ wares_lan_filebeat.group }}"
