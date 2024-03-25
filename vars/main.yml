@@ -3,7 +3,7 @@
 
 wares_lan_filebeat_source:
   temporary_dir: "/var/tmp"
-  extracted_dirname: "filebeat-8.10.4"
+  extracted_dirname: "filebeat-8.10.4-linux-x86_64"
   download_url: "https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.10.4-linux-x86_64.tar.gz"
   checksum: "sha512:37075e04a4b2c820ca980de13734533c795ceb95da5595ef74e6ffc432000b5361c4b72495abf5830788cd50346ac065769ea570ec257aa46cd6851967504e73"
   basic_auth_user: "httpuser"

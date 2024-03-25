@@ -29,26 +29,26 @@
 
     - name: Ensure filebeat user target group exists
       ansible.builtin.group:
-        name: "{{ wares_lan_filebeat.group }}"
+        name: "{{ wares_lan_filebeat_fs.group }}"
         state: present
 
     - name: Create filebeat user if it does not exist
       ansible.builtin.user:
-        name: "{{ wares_lan_filebeat.user }}"
+        name: "{{ wares_lan_filebeat_fs.user }}"
         comment: "Filebeat User"
-        group: "{{ wares_lan_filebeat.group }}"
+        group: "{{ wares_lan_filebeat_fs.group }}"
         shell: "{{ '/usr/sbin/nologin' if wares_lan_filebeat.run_as_service is true else omit }}"
 
     - name: Create directories if they do not exist
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
-        owner: "{{ wares_lan_filebeat.user }}"
-        group: "{{ wares_lan_filebeat.group }}"
+        owner: "{{ wares_lan_filebeat_fs.user }}"
+        group: "{{ wares_lan_filebeat_fs.group }}"
         mode: '0755'
       loop:
-        - "{{ wares_lan_filebeat.binary_dir }}"
-        - "{{ wares_lan_filebeat.config_dir }}"
+        - "{{ wares_lan_filebeat_fs.binary_dir }}"
+        - "{{ wares_lan_filebeat_fs.config_dir }}"
 
 
     ################################
@@ -64,9 +64,9 @@
     - name: Copy extracted content to filebeat binary dir
       ansible.builtin.copy:
         src: "{{ wares_lan_filebeat_source.temporary_dir }}/{{ wares_lan_filebeat_source.extracted_dirname }}/"
-        dest: "{{ wares_lan_filebeat.binary_dir }}/"
-        owner: "{{ wares_lan_filebeat.user }}"
-        group: "{{ wares_lan_filebeat.group }}"
+        dest: "{{ wares_lan_filebeat_fs.binary_dir }}/"
+        owner: "{{ wares_lan_filebeat_fs.user }}"
+        group: "{{ wares_lan_filebeat_fs.group }}"
         mode: '0755'
         remote_src: yes
 
@@ -78,14 +78,14 @@
     - name: Template config file to filebeat config directory
       ansible.builtin.template:
         src: "filebeat-config.yml"
-        dest: "{{ wares_lan_filebeat.config_dir }}/{{ wares_lan_filebeat.config_filename }}"
-        owner: "{{ wares_lan_filebeat.user }}"
-        group: "{{ wares_lan_filebeat.group }}"
-        mode: '0755'
+        dest: "{{ wares_lan_filebeat_fs.config_dir }}/{{ wares_lan_filebeat_fs.config_filename }}"
+        owner: "{{ wares_lan_filebeat_fs.user }}"
+        group: "{{ wares_lan_filebeat_fs.group }}"
+        mode: '0700'
 
     - name: Set Filebeat service
       ansible.builtin.include_tasks: "set_filebeat_service.yml"
-      when: wares_lan_filebeat.run_as_service == true
+      when: wares_lan_filebeat_fs.run_as_service == true
 
 
   always:
